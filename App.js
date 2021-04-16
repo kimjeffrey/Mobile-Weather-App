@@ -19,11 +19,14 @@ import {
 import {WEATHERMAP_APP_ID} from '@env';
 import Header from './components/Header';
 import HourlyWeather from './components/HourlyWeather';
+import DailyWeather from './components/DailyWeather';
 
 const App = () => {
   const [text, setText] = useState("");
   const [weatherData, setWeatherData] = useState();
   const [hourlyData, setHourlyData] = useState();
+  const [hourlyTab, setHourlyTab] = useState(true);
+  const [sevenDayTab, setSevenDayTab] = useState(false);
 
   async function handleSearch() {
     let cityName = text.trim().split(' ').join('%20');
@@ -1583,6 +1586,11 @@ const App = () => {
     return new Date().toDateString();
   }
 
+  function handlePress() {
+    setHourlyTab(prev => !prev);
+    setSevenDayTab(prev => !prev);
+  }
+
   function displayHourlyData() {
     let currentDay = new Date().getDay();
     return hourlyData.hourly.map(hour => {
@@ -1597,6 +1605,12 @@ const App = () => {
         return <HourlyWeather key={hour.dt} dt={hour.dt} temp={hour.temp} description={hour.weather[0].main} longDescription={hour.weather[0].description} pop={hour.pop} wind={hour.wind_speed} feels={hour.feels_like} humidity={hour.humidity} uvi={hour.uvi} />
       }
     })
+  }
+
+  function displaySevenDayData() {
+    return hourlyData.daily.map(day => (
+      <DailyWeather key={day.dt} dt={day.dt} dayTemp={day.temp.day} nightTemp={day.temp.night} min={day.temp.min} max={day.temp.max} dayFeels={day.feels_like.day} nightFeels={day.feels_like.night} humidity={day.humidity} wind={day.wind_speed} description={day.weather[0].main} longDescription={day.weather[0].description} pop={day.pop} uvi={day.uvi} />
+    ))
   }
 
   return (
@@ -1644,15 +1658,21 @@ const App = () => {
       }
       {hourlyData &&
         <View style={styles.tabs}>
-          <Text style={[styles.weatherText, styles.tab, styles.selected]}>Hourly Weather</Text>
-          <Text style={[styles.weatherText, styles.tab]}>7 Day Weather</Text>
+          <Text style={[styles.weatherText, styles.tab, hourlyTab && styles.selected]} onPress={handlePress}>Hourly Weather</Text>
+          <Text style={[styles.weatherText, styles.tab, sevenDayTab && styles.selected]} onPress={handlePress}>7 Day Weather</Text>
         </View>
       }
-      {hourlyData &&
+      {hourlyData && hourlyTab &&
         <View style={styles.container}>
           <Text style={[styles.weatherText, styles.hourlyTitle]}>Hourly Weather</Text>
           <Text style={[styles.weatherText, styles.hourlyDate]}>{getCurrentDate()}</Text>
           {displayHourlyData()}
+        </View>
+      }
+      {hourlyData && sevenDayTab &&
+        <View style={styles.container}>
+          <Text style={[styles.weatherText, styles.hourlyTitle]}>7 Day Weather</Text>
+          {displaySevenDayData()}
         </View>
       }
     </ScrollView>

@@ -6,7 +6,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
-const HourlyWeather = ({dt, temp, description, pop, wind, feels, humidity, uvi}) => {
+const DailyWeather = ({dt, dayTemp, nightTemp, min, max, description, longDescription, pop, wind, dayFeels, nightFeels, humidity, uvi}) => {
   const [displayMore, setDisplayMore] = useState(false);
   const [buttonText, setButtonText] = useState("ᐯ");
 
@@ -24,8 +24,8 @@ const HourlyWeather = ({dt, temp, description, pop, wind, feels, humidity, uvi})
   return (
     <>
     <View style={styles.hourlyInfoContainer}>
-      <Text style={[styles.weatherText, styles.hour]}>{new Date(dt * 1000).getHours()}</Text>
-      <Text style={[styles.weatherText, styles.temp]}>{Math.round(temp)}&deg;</Text>
+      <Text style={[styles.weatherText, styles.hour]}>{new Date(dt * 1000).getDate()}</Text>
+      <Text style={[styles.weatherText, styles.temp]}>{Math.round(dayTemp)}&deg;/{Math.round(nightTemp)}&deg;</Text>
       <Text style={[styles.weatherText, styles.description]}>{description}</Text>
       <Text style={styles.weatherText}>{Math.round(pop * 100)}%</Text>
       <Text style={styles.weatherText}>{Math.round(wind)}mph</Text>
@@ -35,7 +35,7 @@ const HourlyWeather = ({dt, temp, description, pop, wind, feels, humidity, uvi})
       <View style={styles.moreInfo}>
         <View>
           <Text style={styles.weatherText}>Feels Like </Text>
-          <Text style={styles.weatherText}>{Math.round(feels)}&deg;</Text>
+          <Text style={styles.weatherText}>{Math.round(dayFeels)}&deg;</Text>
         </View>
         <View>
           <Text style={styles.weatherText}>Humidity </Text>
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     flex: .5,
   },
   temp: {
-    flex: .8,
+    flex: 1.2,
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -88,4 +88,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default HourlyWeather;
+export default DailyWeather;
