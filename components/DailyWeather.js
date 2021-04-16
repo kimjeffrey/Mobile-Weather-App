@@ -6,7 +6,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
-const DailyWeather = ({dt, dayTemp, nightTemp, min, max, description, longDescription, pop, wind, dayFeels, nightFeels, humidity, uvi}) => {
+const DailyWeather = ({dt, dayTemp, nightTemp, description, pop, wind, dayFeels, nightFeels, humidity, uvi}) => {
   const [displayMore, setDisplayMore] = useState(false);
   const [buttonText, setButtonText] = useState("ᐯ");
 
@@ -21,10 +21,28 @@ const DailyWeather = ({dt, dayTemp, nightTemp, min, max, description, longDescri
     });
   }
 
+  function getHour() {
+    let hour = new Date(dt * 1000).getDate();
+    if(hour > 12) {
+      return hour - 12 + " pm"
+    } else if(hour === 12) {
+      return "12 pm"
+    } else if(hour === 0) {
+      return "12 am"
+    } else {
+      return hour + " am"
+    }
+  }
+
+  function getDay() {
+    let date = new Date(dt * 1000);
+    return date.toDateString().slice(0, 3) + ' ' + date.getDate();
+  }
+
   return (
     <>
     <View style={styles.hourlyInfoContainer}>
-      <Text style={[styles.weatherText, styles.hour]}>{new Date(dt * 1000).getDate()}</Text>
+      <Text style={[styles.weatherText, styles.hour]}>{getDay()}</Text>
       <Text style={[styles.weatherText, styles.temp]}>{Math.round(dayTemp)}&deg;/{Math.round(nightTemp)}&deg;</Text>
       <Text style={[styles.weatherText, styles.description]}>{description}</Text>
       <Text style={styles.weatherText}>{Math.round(pop * 100)}%</Text>
@@ -35,7 +53,7 @@ const DailyWeather = ({dt, dayTemp, nightTemp, min, max, description, longDescri
       <View style={styles.moreInfo}>
         <View>
           <Text style={styles.weatherText}>Feels Like </Text>
-          <Text style={styles.weatherText}>{Math.round(dayFeels)}&deg;</Text>
+          <Text style={styles.weatherText}>{Math.round(dayFeels)}&deg;/{Math.round(nightFeels)}&deg;</Text>
         </View>
         <View>
           <Text style={styles.weatherText}>Humidity </Text>
@@ -66,10 +84,10 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   hour: {
-    flex: .5,
+    flex: 1,
   },
   temp: {
-    flex: 1.2,
+    flex: 1.4,
     fontSize: 16,
     fontWeight: 'bold',
   },

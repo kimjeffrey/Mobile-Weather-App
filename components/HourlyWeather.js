@@ -21,13 +21,26 @@ const HourlyWeather = ({dt, temp, description, pop, wind, feels, humidity, uvi})
     });
   }
 
+  function getHour() {
+    let hour = new Date(dt * 1000).getHours();
+    if(hour > 12) {
+      return hour - 12 + " pm"
+    } else if(hour === 12) {
+      return "12 pm"
+    } else if(hour === 0) {
+      return "12 am"
+    } else {
+      return hour + " am"
+    }
+  }
+
   return (
     <>
     <View style={styles.hourlyInfoContainer}>
-      <Text style={[styles.weatherText, styles.hour]}>{new Date(dt * 1000).getHours()}</Text>
+      <Text style={[styles.weatherText, styles.hour]}>{getHour()}</Text>
       <Text style={[styles.weatherText, styles.temp]}>{Math.round(temp)}&deg;</Text>
       <Text style={[styles.weatherText, styles.description]}>{description}</Text>
-      <Text style={styles.weatherText}>{Math.round(pop * 100)}%</Text>
+      <Text style={[styles.weatherText, styles.pop]}>{Math.round(pop * 100)}%</Text>
       <Text style={styles.weatherText}>{Math.round(wind)}mph</Text>
       <Text style={[styles.weatherText, styles.moreInfoButton]} onPress={handleClick}>{buttonText}</Text>
     </View>
@@ -66,15 +79,18 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   hour: {
-    flex: .5,
+    flex: .8,
   },
   temp: {
-    flex: .8,
+    flex: 1,
     fontSize: 16,
     fontWeight: 'bold',
   },
   description: {
     flex: 1.5,
+  },
+  pop: {
+    flex: .7,
   },
   moreInfoButton: {
     flex: .5,
