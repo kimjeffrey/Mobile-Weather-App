@@ -59,8 +59,14 @@ const App = () => {
   }
 
   async function handleSearch() {
-    let cityName = text.trim().split(' ').join('%20');
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${WEATHERMAP_APP_ID}&units=imperial`;
+    let url = '';
+    if(isNaN(text)){
+      let cityName = text.trim().split(' ').join('%20');
+      url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${WEATHERMAP_APP_ID}&units=imperial`;
+    } else {
+      let number = text.trim();
+      url = `https://api.openweathermap.org/data/2.5/weather?zip=${number}&appid=${WEATHERMAP_APP_ID}&units=imperial`;
+    }
     let res = await fetch(url);
     let json = await res.json();
 
