@@ -4,6 +4,7 @@ import {
   Text,
   View,
   StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 
 const HourlyWeather = ({dt, temp, description, pop, wind, feels, humidity, uvi}) => {
@@ -36,13 +37,15 @@ const HourlyWeather = ({dt, temp, description, pop, wind, feels, humidity, uvi})
 
   return (
     <>
-    <View style={styles.hourlyInfoContainer}>
-      <Text style={[styles.weatherText, styles.hour]}>{getHour()}</Text>
-      <Text style={[styles.weatherText, styles.temp]}>{Math.round(temp)}&deg;</Text>
-      <Text style={[styles.weatherText, styles.description]}>{description}</Text>
-      <Text style={[styles.weatherText, styles.pop]}>{Math.round(pop * 100)}%</Text>
-      <Text style={styles.weatherText}>{Math.round(wind)}mph</Text>
-      <Text style={[styles.weatherText, styles.moreInfoButton]} onPress={handleClick}>{buttonText}</Text>
+    <View>
+      <TouchableOpacity style={styles.hourlyInfoContainer} onPress={handleClick}> 
+        <Text style={[styles.weatherText, styles.hour]}>{getHour()}</Text>
+        <Text style={[styles.weatherText, styles.temp]}>{Math.round(temp)}&deg;</Text>
+        <Text style={[styles.weatherText, styles.description]}>{description}</Text>
+        <Text style={[styles.weatherText, styles.pop]}>{Math.round(pop * 100)}%</Text>
+        <Text style={styles.weatherText}>{Math.round(wind)}mph</Text>
+        <Text style={[styles.weatherText, styles.moreInfoButton]}>{buttonText}</Text>
+      </TouchableOpacity>
     </View>
     {displayMore &&
       <View style={styles.moreInfo}>
