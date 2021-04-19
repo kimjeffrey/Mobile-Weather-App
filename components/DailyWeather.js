@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {
+  Appearance,
   Button,
   Text,
   View,
@@ -8,6 +9,9 @@ import {
 } from 'react-native';
 
 const DailyWeather = ({dt, dayTemp, nightTemp, description, pop, wind, dayFeels, nightFeels, humidity, uvi}) => {
+  const colorScheme = Appearance.getColorScheme();
+  const themeTextStyle = colorScheme === 'light' ? styles.lightThemeText : styles.darkThemeText;
+
   const [displayMore, setDisplayMore] = useState(false);
   const [buttonText, setButtonText] = useState("ᐯ");
 
@@ -22,19 +26,6 @@ const DailyWeather = ({dt, dayTemp, nightTemp, description, pop, wind, dayFeels,
     });
   }
 
-  function getHour() {
-    let hour = new Date(dt * 1000).getDate();
-    if(hour > 12) {
-      return hour - 12 + " pm"
-    } else if(hour === 12) {
-      return "12 pm"
-    } else if(hour === 0) {
-      return "12 am"
-    } else {
-      return hour + " am"
-    }
-  }
-
   function getDay() {
     let date = new Date(dt * 1000);
     return date.toDateString().slice(0, 3) + ' ' + date.getDate();
@@ -44,27 +35,27 @@ const DailyWeather = ({dt, dayTemp, nightTemp, description, pop, wind, dayFeels,
     <>
     <View>
       <TouchableOpacity style={styles.hourlyInfoContainer} onPress={handleClick}>
-        <Text style={[styles.weatherText, styles.hour]}>{getDay()}</Text>
-        <Text style={[styles.weatherText, styles.temp]}>{Math.round(dayTemp)}&deg;/{Math.round(nightTemp)}&deg;</Text>
-        <Text style={[styles.weatherText, styles.description]}>{description}</Text>
-        <Text style={styles.weatherText}>{Math.round(pop * 100)}%</Text>
-        <Text style={styles.weatherText}>{Math.round(wind)}mph</Text>
-        <Text style={[styles.weatherText, styles.moreInfoButton]}>{buttonText}</Text>
+        <Text style={[themeTextStyle, styles.hour]}>{getDay()}</Text>
+        <Text style={[themeTextStyle, styles.temp]}>{Math.round(dayTemp)}&deg;/{Math.round(nightTemp)}&deg;</Text>
+        <Text style={[themeTextStyle, styles.description]}>{description}</Text>
+        <Text style={themeTextStyle}>{Math.round(pop * 100)}%</Text>
+        <Text style={themeTextStyle}>{Math.round(wind)}mph</Text>
+        <Text style={[themeTextStyle, styles.moreInfoButton]}>{buttonText}</Text>
       </TouchableOpacity>
     </View>
     {displayMore &&
       <View style={styles.moreInfo}>
         <View>
-          <Text style={styles.weatherText}>Feels Like </Text>
-          <Text style={styles.weatherText}>{Math.round(dayFeels)}&deg;/{Math.round(nightFeels)}&deg;</Text>
+          <Text style={themeTextStyle}>Feels Like </Text>
+          <Text style={themeTextStyle}>{Math.round(dayFeels)}&deg;/{Math.round(nightFeels)}&deg;</Text>
         </View>
         <View>
-          <Text style={styles.weatherText}>Humidity </Text>
-          <Text style={styles.weatherText}>{humidity}%</Text>
+          <Text style={themeTextStyle}>Humidity </Text>
+          <Text style={themeTextStyle}>{humidity}%</Text>
         </View>
         <View>
-          <Text style={styles.weatherText}>UV Index </Text>
-          <Text style={styles.weatherText}>{uvi} of 10</Text>
+          <Text style={themeTextStyle}>UV Index </Text>
+          <Text style={themeTextStyle}>{uvi} of 10</Text>
         </View>
       </View>
     }
@@ -73,6 +64,14 @@ const DailyWeather = ({dt, dayTemp, nightTemp, description, pop, wind, dayFeels,
 };
 
 const styles = StyleSheet.create({
+  lightThemeText: {
+    flex: 1,
+    color: 'black',
+  },
+  darkThemeText: {
+    flex: 1,
+    color: 'white',
+  },
   hourlyInfoContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -81,10 +80,6 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     borderColor: 'grey',
     borderBottomWidth: 1,
-  },
-  weatherText: {
-    flex: 1,
-    color: 'white',
   },
   hour: {
     flex: 1,

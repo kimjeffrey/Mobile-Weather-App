@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {
-  Button,
+  Appearance,
+  Image,
   Text,
   View,
   StyleSheet,
@@ -8,6 +9,9 @@ import {
 } from 'react-native';
 
 const HourlyWeather = ({dt, temp, description, pop, wind, feels, humidity, uvi}) => {
+  const colorScheme = Appearance.getColorScheme();
+  const themeTextStyle = colorScheme === 'light' ? styles.lightThemeText : styles.darkThemeText;
+
   const [displayMore, setDisplayMore] = useState(false);
   const [buttonText, setButtonText] = useState("ᐯ");
 
@@ -39,27 +43,29 @@ const HourlyWeather = ({dt, temp, description, pop, wind, feels, humidity, uvi})
     <>
     <View>
       <TouchableOpacity style={styles.hourlyInfoContainer} onPress={handleClick}> 
-        <Text style={[styles.weatherText, styles.hour]}>{getHour()}</Text>
-        <Text style={[styles.weatherText, styles.temp]}>{Math.round(temp)}&deg;</Text>
-        <Text style={[styles.weatherText, styles.description]}>{description}</Text>
-        <Text style={[styles.weatherText, styles.pop]}>{Math.round(pop * 100)}%</Text>
-        <Text style={styles.weatherText}>{Math.round(wind)}mph</Text>
-        <Text style={[styles.weatherText, styles.moreInfoButton]}>{buttonText}</Text>
+        <Text style={[themeTextStyle, styles.hour]}>{getHour()}</Text>
+        <Text style={[themeTextStyle, styles.temp]}>{Math.round(temp)}&deg;</Text>
+        <Text style={[themeTextStyle, styles.description]}>{description}</Text>
+        <Text style={[themeTextStyle, styles.pop]}>
+          {Math.round(pop * 100)}%
+        </Text>
+        <Text style={themeTextStyle}>{Math.round(wind)}mph</Text>
+        <Text style={[themeTextStyle, styles.moreInfoButton]}>{buttonText}</Text>
       </TouchableOpacity>
     </View>
     {displayMore &&
       <View style={styles.moreInfo}>
         <View>
-          <Text style={styles.weatherText}>Feels Like </Text>
-          <Text style={styles.weatherText}>{Math.round(feels)}&deg;</Text>
+          <Text style={themeTextStyle}>Feels Like </Text>
+          <Text style={themeTextStyle}>{Math.round(feels)}&deg;</Text>
         </View>
         <View>
-          <Text style={styles.weatherText}>Humidity </Text>
-          <Text style={styles.weatherText}>{humidity}%</Text>
+          <Text style={themeTextStyle}>Humidity </Text>
+          <Text style={themeTextStyle}>{humidity}%</Text>
         </View>
         <View>
-          <Text style={styles.weatherText}>UV Index </Text>
-          <Text style={styles.weatherText}>{uvi} of 10</Text>
+          <Text style={themeTextStyle}>UV Index </Text>
+          <Text style={themeTextStyle}>{uvi} of 10</Text>
         </View>
       </View>
     }
@@ -77,7 +83,11 @@ const styles = StyleSheet.create({
     borderColor: 'grey',
     borderBottomWidth: 1,
   },
-  weatherText: {
+  lightThemeText: {
+    flex: 1,
+    color: 'black',
+  },
+  darkThemeText: {
     flex: 1,
     color: 'white',
   },

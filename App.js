@@ -9,6 +9,7 @@
 import React, {useState, useEffect} from 'react';
 import {
   Alert,
+  Appearance,
   Button,
   Image,
   Text,
@@ -25,6 +26,10 @@ import HourlyWeather from './components/HourlyWeather';
 import DailyWeather from './components/DailyWeather';
 
 const App = () => {
+  const colorScheme = Appearance.getColorScheme();
+  const themeTextStyle = colorScheme === 'light' ? styles.lightThemeText : styles.darkThemeText;
+  const themeTabStyle = colorScheme === 'light' ? styles.lightThemeSelected : styles.darkThemeSelected;
+
   const [text, setText] = useState("");
   const [weatherData, setWeatherData] = useState();
   const [hourlyData, setHourlyData] = useState();
@@ -59,6 +64,10 @@ const App = () => {
   }
 
   async function handleSearch() {
+    if(text === "") {
+      displayToast("Please enter city name or zip code");
+      return;
+    }
     let url = '';
     if(isNaN(text)){
       let cityName = text.trim().split(' ').join('%20');
@@ -116,7 +125,7 @@ const App = () => {
       if(currentDay !== newDay.getDay()){
         currentDay = newDay.getDay();
         return (<React.Fragment key={hour.dt}>
-          <Text style={[styles.weatherText, styles.hourlyDate]}>{newDay.toDateString()}</Text>
+          <Text style={[themeTextStyle, styles.hourlyDate]}>{newDay.toDateString()}</Text>
           <HourlyWeather dt={hour.dt} temp={hour.temp} description={hour.weather[0].main} pop={hour.pop} wind={hour.wind_speed} feels={hour.feels_like} humidity={hour.humidity} uvi={hour.uvi}/>
         </React.Fragment>)
       } else {
@@ -139,7 +148,7 @@ const App = () => {
       <View style={styles.search}>
         <TextInput 
           style={styles.input} 
-          placeholder="Enter city name here" 
+          placeholder="Enter city name or zip code" 
           onChangeText={text => setText(text)} 
           defaultValue={text}
         />
@@ -153,9 +162,9 @@ const App = () => {
         <View style={styles.weatherContainer}>
           <View style={styles.weatherInfoContainer}>
             <View style={styles.mainTempContainer}>
-              <Text style={styles.weatherText}>As of {getCurrentTime()}</Text>
-              <Text style={[styles.weatherText, styles.mainTemp]}>{weatherData.main.temp}&deg;F</Text>
-              <Text style={[styles.weatherText, styles.description]}>{weatherData.weather[0].description}</Text>
+              <Text style={themeTextStyle}>As of {getCurrentTime()}</Text>
+              <Text style={[themeTextStyle, styles.mainTemp]}>{weatherData.main.temp}&deg;F</Text>
+              <Text style={[themeTextStyle, styles.description]}>{weatherData.weather[0].description}</Text>
             </View>
             <View style={styles.highLowContainer}>
               <Image 
@@ -164,32 +173,32 @@ const App = () => {
                 }}
                 style={styles.image}
               />
-              <Text style={[styles.weatherText, styles.highLow]}>{weatherData.main.temp_max}&deg;/{weatherData.main.temp_min}&deg;</Text>
+              <Text style={[themeTextStyle, styles.highLow]}>{weatherData.main.temp_max}&deg;/{weatherData.main.temp_min}&deg;</Text>
             </View>
           </View>
           <View style={styles.moreInfoContainer}>
-            <Text style={styles.weatherText}>Feels like: {weatherData.main.feels_like}&deg;F</Text>
-            <Text style={styles.weatherText}>Humidity: {weatherData.main.humidity}%</Text>
-            <Text style={styles.weatherText}>Wind speed: {weatherData.wind.speed}mph</Text>
+            <Text style={themeTextStyle}>Feels like: {weatherData.main.feels_like}&deg;F</Text>
+            <Text style={themeTextStyle}>Humidity: {weatherData.main.humidity}%</Text>
+            <Text style={themeTextStyle}>Wind speed: {weatherData.wind.speed}mph</Text>
           </View>
         </View>
       }
       {hourlyData &&
         <View style={styles.tabs}>
-          <Text style={[styles.weatherText, styles.tab, hourlyTab && styles.selected]} onPress={handleHourlyPress}>Hourly Weather</Text>
-          <Text style={[styles.weatherText, styles.tab, sevenDayTab && styles.selected]} onPress={handleSevenPress}>7 Day Weather</Text>
+          <Text style={[themeTextStyle, styles.tab, hourlyTab && themeTabStyle]} onPress={handleHourlyPress}>Hourly Weather</Text>
+          <Text style={[themeTextStyle, styles.tab, sevenDayTab && themeTabStyle]} onPress={handleSevenPress}>7 Day Weather</Text>
         </View>
       }
       {hourlyData && hourlyTab &&
         <View style={styles.container}>
-          <Text style={[styles.weatherText, styles.hourlyTitle]}>Hourly Weather</Text>
-          <Text style={[styles.weatherText, styles.hourlyDate]}>{getCurrentDate()}</Text>
+          <Text style={[themeTextStyle, styles.hourlyTitle]}>Hourly Weather</Text>
+          <Text style={[themeTextStyle, styles.hourlyDate]}>{getCurrentDate()}</Text>
           {displayHourlyData()}
         </View>
       }
       {hourlyData && sevenDayTab &&
         <View style={styles.container}>
-          <Text style={[styles.weatherText, styles.hourlyTitle]}>7 Day Weather</Text>
+          <Text style={[themeTextStyle, styles.hourlyTitle]}>7 Day Weather</Text>
           {displaySevenDayData()}
         </View>
       }
@@ -227,7 +236,10 @@ const styles = StyleSheet.create({
     borderColor: 'grey',
     borderWidth: 1,
   },
-  weatherText: {
+  lightThemeText: {
+    color: 'black',
+  },
+  darkThemeText: {
     color: 'white',
   },
   weatherInfoContainer: {
@@ -277,7 +289,10 @@ const styles = StyleSheet.create({
     borderColor: 'grey',
     borderWidth: 1,
   },
-  selected: {
+  lightThemeSelected: {
+    backgroundColor: '#a799b7',
+  },
+  darkThemeSelected: {
     backgroundColor: '#3c415c',
   },
   hourlyTitle: {
