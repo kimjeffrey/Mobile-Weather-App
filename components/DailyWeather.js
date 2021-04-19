@@ -7,6 +7,8 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faTint, faWind } from '@fortawesome/free-solid-svg-icons';
 
 const DailyWeather = ({dt, dayTemp, nightTemp, description, pop, wind, dayFeels, nightFeels, humidity, uvi}) => {
   const colorScheme = Appearance.getColorScheme();
@@ -38,8 +40,10 @@ const DailyWeather = ({dt, dayTemp, nightTemp, description, pop, wind, dayFeels,
         <Text style={[themeTextStyle, styles.hour]}>{getDay()}</Text>
         <Text style={[themeTextStyle, styles.temp]}>{Math.round(dayTemp)}&deg;/{Math.round(nightTemp)}&deg;</Text>
         <Text style={[themeTextStyle, styles.description]}>{description}</Text>
+        <FontAwesomeIcon icon={faTint} style={styles.icon} />
         <Text style={themeTextStyle}>{Math.round(pop * 100)}%</Text>
-        <Text style={themeTextStyle}>{Math.round(wind)}mph</Text>
+        <FontAwesomeIcon icon={faWind} style={styles.icon} />
+        <Text style={[themeTextStyle, styles.wind]}>{Math.round(wind)}mph</Text>
         <Text style={[themeTextStyle, styles.moreInfoButton]}>{buttonText}</Text>
       </TouchableOpacity>
     </View>
@@ -82,15 +86,18 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   hour: {
-    flex: 1,
+    flex: 1.4,
   },
   temp: {
-    flex: 1.4,
+    flex: 1.5,
     fontSize: 16,
     fontWeight: 'bold',
   },
   description: {
     flex: 1.5,
+  },
+  wind: {
+    flex: 1.3,
   },
   moreInfoButton: {
     flex: .5,
@@ -101,7 +108,10 @@ const styles = StyleSheet.create({
     padding: 10,
     borderColor: 'grey',
     borderBottomWidth: 1,
-  }
+  },
+  icon: {
+    color: '#00A7E1',
+  },
 });
 
 export default DailyWeather;

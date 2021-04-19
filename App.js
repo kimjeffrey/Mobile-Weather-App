@@ -20,6 +20,7 @@ import {
   ToastAndroid,
   Platform,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {WEATHERMAP_APP_ID} from '@env';
 import Header from './components/Header';
 import HourlyWeather from './components/HourlyWeather';
@@ -31,6 +32,7 @@ const App = () => {
   const themeTabStyle = colorScheme === 'light' ? styles.lightThemeSelected : styles.darkThemeSelected;
 
   const [text, setText] = useState("");
+  const [savedText, setSavedText] = useState("");
   const [weatherData, setWeatherData] = useState();
   const [hourlyData, setHourlyData] = useState();
   const [hourlyTab, setHourlyTab] = useState(true);
@@ -39,10 +41,40 @@ const App = () => {
   const [lon, setLon] = useState(null);
 
   useEffect(() => {
+    getData();
+  }, [])
+
+  useEffect(() => {
+    if(text !== "") {
+      handleSearch();
+    }
+  }, [savedText])
+
+  useEffect(() => {
     if(lat !== null && lon !== null ){
       getHourlyData();
     }
   }, [lat, lon])
+
+  const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem('search', value)
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('search')
+      if(value !== null) {
+        setText(value);
+        setSavedText(value);
+      }
+    } catch(e) {
+      console.log(e);
+    }
+  }
 
   function displayToast(message) {
     if(Platform.OS === 'android') {
@@ -68,6 +100,7 @@ const App = () => {
       displayToast("Please enter city name or zip code");
       return;
     }
+    storeData(text);
     let url = '';
     if(isNaN(text)){
       let cityName = text.trim().split(' ').join('%20');

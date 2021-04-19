@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
 import {
   Appearance,
-  Image,
   Text,
   View,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faTint, faWind } from '@fortawesome/free-solid-svg-icons';
 
 const HourlyWeather = ({dt, temp, description, pop, wind, feels, humidity, uvi}) => {
   const colorScheme = Appearance.getColorScheme();
@@ -46,9 +47,9 @@ const HourlyWeather = ({dt, temp, description, pop, wind, feels, humidity, uvi})
         <Text style={[themeTextStyle, styles.hour]}>{getHour()}</Text>
         <Text style={[themeTextStyle, styles.temp]}>{Math.round(temp)}&deg;</Text>
         <Text style={[themeTextStyle, styles.description]}>{description}</Text>
-        <Text style={[themeTextStyle, styles.pop]}>
-          {Math.round(pop * 100)}%
-        </Text>
+        <FontAwesomeIcon icon={faTint} style={styles.icon} />
+        <Text style={[themeTextStyle, styles.pop]}>{Math.round(pop * 100)}%</Text>
+        <FontAwesomeIcon icon={faWind} style={styles.icon} />
         <Text style={themeTextStyle}>{Math.round(wind)}mph</Text>
         <Text style={[themeTextStyle, styles.moreInfoButton]}>{buttonText}</Text>
       </TouchableOpacity>
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   hour: {
-    flex: .8,
+    flex: 1,
   },
   temp: {
     flex: 1,
@@ -103,7 +104,10 @@ const styles = StyleSheet.create({
     flex: 1.5,
   },
   pop: {
-    flex: .7,
+    flex: .9,
+  },
+  icon: {
+    color: '#00A7E1',
   },
   moreInfoButton: {
     flex: .5,
