@@ -169,7 +169,7 @@ const App = () => {
 
   function displaySevenDayData() {
     return hourlyData.daily.map(day => (
-      <DailyWeather key={day.dt} dt={day.dt} dayTemp={day.temp.day} nightTemp={day.temp.night} dayFeels={day.feels_like.day} nightFeels={day.feels_like.night} humidity={day.humidity} wind={day.wind_speed} description={day.weather[0].main} pop={day.pop} uvi={day.uvi} />
+      <DailyWeather key={day.dt} dt={day.dt} maxTemp={day.temp.max} minTemp={day.temp.min} dayFeels={day.feels_like.day} nightFeels={day.feels_like.night} humidity={day.humidity} wind={day.wind_speed} description={day.weather[0].main} pop={day.pop} uvi={day.uvi} />
     ))
   }
 

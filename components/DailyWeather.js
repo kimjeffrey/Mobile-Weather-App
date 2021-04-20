@@ -10,7 +10,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTint, faWind } from '@fortawesome/free-solid-svg-icons';
 
-const DailyWeather = ({dt, dayTemp, nightTemp, description, pop, wind, dayFeels, nightFeels, humidity, uvi}) => {
+const DailyWeather = ({dt, maxTemp, minTemp, description, pop, wind, dayFeels, nightFeels, humidity, uvi}) => {
   const colorScheme = Appearance.getColorScheme();
   const themeTextStyle = colorScheme === 'light' ? styles.lightThemeText : styles.darkThemeText;
 
@@ -38,7 +38,7 @@ const DailyWeather = ({dt, dayTemp, nightTemp, description, pop, wind, dayFeels,
     <View>
       <TouchableOpacity style={styles.hourlyInfoContainer} onPress={handleClick}>
         <Text style={[themeTextStyle, styles.hour]}>{getDay()}</Text>
-        <Text style={[themeTextStyle, styles.temp]}>{Math.round(dayTemp)}&deg;/{Math.round(nightTemp)}&deg;</Text>
+        <Text style={[themeTextStyle, styles.temp]}>{Math.round(maxTemp)}&deg;/{Math.round(minTemp)}&deg;</Text>
         <Text style={[themeTextStyle, styles.description]}>{description}</Text>
         <FontAwesomeIcon icon={faTint} style={styles.icon} />
         <Text style={themeTextStyle}>{Math.round(pop * 100)}%</Text>
